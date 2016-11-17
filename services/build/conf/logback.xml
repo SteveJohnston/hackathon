@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+
+    <define name="fqn" class="com.moneysupermarket.services.common.application.dropwizard.logging.ConfigBasedPropertyDefiner" >
+        <configKey>fqn</configKey>
+    </define>
+
+    <define name="buildNumber" class="com.moneysupermarket.services.common.application.dropwizard.logging.ConfigBasedPropertyDefiner" >
+        <configKey>buildNumber</configKey>
+    </define>
+
+    <define name="logstashHost" class="com.moneysupermarket.services.common.application.dropwizard.logging.ConfigBasedPropertyDefiner" >
+        <configKey>logstashHost</configKey>
+    </define>
+
+    <define name="logstashPort" class="com.moneysupermarket.services.common.application.dropwizard.logging.ConfigBasedPropertyDefiner" >
+        <configKey>logstashPort</configKey>
+    </define>
+
+    <define name="applicationName" class="com.moneysupermarket.services.common.application.dropwizard.logging.ConfigBasedPropertyDefiner" >
+        <configKey>applicationName</configKey>
+    </define>
+
+    <appender name="STASH" class="net.logstash.logback.appender.LogstashSocketAppender">
+        <host>${logstashHost}</host>
+        <port>${logstashPort}</port>
+        <customFields>{"logsource":"${fqn}","appName":"${applicationName}","appVersion":"${buildNumber}"}</customFields>
+    </appender>
+
+    <property name="ASYNC_QUEUE_SIZE" value="100000" />
+
+    <appender name="ASYNC_STASH" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>${ASYNC_QUEUE_SIZE}</queueSize>
+        <appender-ref ref="STASH" />
+    </appender>
+
+    <root level="WARN">
+        <appender-ref ref="ASYNC_STASH" />
+    </root>
+
+    <logger name="org.eclipse.jetty.setuid" level="WARN"/>
+    <logger name="org.eclipse.jetty.server.handler" level="WARN"/>
+
+    <logger name="com.moneysupermarket.services.common.application.dropwizard.logging.LifecycleLogger" level="WARN" ref="ASYNC_STASH"/>
+
+</configuration>

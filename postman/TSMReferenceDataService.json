@@ -1,0 +1,78 @@
+{
+	"id": "e6e3fac8-5a92-26d0-8170-421f5fcca34a",
+	"name": "TSM Reference Data Service",
+	"description": "",
+	"order": [
+		"05b30fca-692e-d436-be21-8035459441ea",
+		"7aea9551-dae0-48e1-b6f7-d12ce62552fd",
+		"bd906d91-0baa-e00c-3789-3ff2fca73089"
+	],
+	"folders": [],
+	"timestamp": 1463993600007,
+	"owner": "368268",
+	"remoteLink": "",
+	"public": false,
+	"requests": [
+		{
+			"id": "05b30fca-692e-d436-be21-8035459441ea",
+			"headers": "",
+			"url": "http:{{tsm-reference-data-host}}/global/tsm/reference-data/v1/status",
+			"pathVariables": {},
+			"preRequestScript": null,
+			"method": "GET",
+			"collectionId": "e6e3fac8-5a92-26d0-8170-421f5fcca34a",
+			"data": null,
+			"dataMode": "params",
+			"name": "Status",
+			"description": "The status endpoint which shows the health of the application.",
+			"descriptionFormat": "html",
+			"time": 1463993600007,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		},
+		{
+			"id": "7aea9551-dae0-48e1-b6f7-d12ce62552fd",
+			"headers": "",
+			"url": "http:{{tsm-reference-data-host}}/global/tsm/reference-data/v1/admin/info",
+			"preRequestScript": null,
+			"pathVariables": {},
+			"method": "GET",
+			"data": null,
+			"dataMode": "params",
+			"version": 2,
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1463993685823,
+			"name": "Info",
+			"description": "The info endpoint which shows current version.",
+			"collectionId": "e6e3fac8-5a92-26d0-8170-421f5fcca34a",
+			"responses": []
+		},
+		{
+			"id": "bd906d91-0baa-e00c-3789-3ff2fca73089",
+			"headers": "",
+			"url": "http:{{tsm-reference-data-host}}/global/tsm/reference-data/v1/locations/holidays/search/:autocomplete",
+			"pathVariables": {
+				"autocomplete": "man"
+			},
+			"preRequestScript": null,
+			"method": "GET",
+			"collectionId": "e6e3fac8-5a92-26d0-8170-421f5fcca34a",
+			"data": null,
+			"dataMode": "params",
+			"name": "Holiday Auto-complete",
+			"description": "Auto completion endpoint for holiday destinations",
+			"descriptionFormat": "html",
+			"time": 1463996391026,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {}
+		}
+	]
+}

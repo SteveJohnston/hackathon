@@ -1,0 +1,32 @@
+applicationId: "tsm-reference-data-service"
+applicationName: "tsm-reference-data-service"
+buildNumber: 0.0.0
+deploymentColour: blue
+
+server:
+  applicationConnectors:
+  - type: http
+    port: 9014
+  adminConnectors:
+  - type: http
+    port: 9015
+
+logging:
+  level: INFO
+  loggers:
+     com.travelsupermarket.referencedata: TRACE
+     javax.management.modelmbean: WARN
+     org.eclipse.jetty.setuid: WARN
+     org.eclipse.jetty.server.handler: WARN
+  appenders:
+    - type: console
+      timeZone: UTC
+      target: stdout
+
+aggClientConfig:
+  host: lb-services-elasticsearch.services.ci1-services.gb.tsm.internal
+  port: 9300
+  holidaysIndexName: alan
+  carHireIndexName: alan
+  hotelsIndexName: alan
+  flightsIndexName: alan

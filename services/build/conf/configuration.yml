@@ -1,0 +1,27 @@
+applicationId: "tsm-reference-data-service"
+applicationName: "tsm-reference-data-service"
+buildNumber: 0.0.0
+deploymentColour: blue
+
+server:
+  applicationConnectors:
+  - type: http
+    port: 9014
+  adminConnectors:
+  - type: http
+    port: 9015
+  requestLog:
+    appenders: []
+
+logbackConfigFileName: "conf/logback.xml"
+
+elasticsearchClientConfig:
+  host: n1.lb-services-elasticsearch.services.ci1-services.gb.tsm.internal
+  port: 9300
+  holidaysIndexName: alan
+  carHireIndexName: alan
+  hotelsIndexName: alan
+  flightsIndexName: alan
+  settings:
+    cluster.name: elasticsearch
+    client.transport.sniff : false

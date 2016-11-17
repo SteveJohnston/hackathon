@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.travelsupermarket.referencedata.elasticsearch.querybuilder.CarHireAutoCompleteAutoCompleteElasticsearchQueryBuilderTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2016-11-09T15:58:26" hostname="2789" time="0.012">
+  <properties/>
+  <testcase name="testBuildQuery" classname="com.travelsupermarket.referencedata.elasticsearch.querybuilder.CarHireAutoCompleteAutoCompleteElasticsearchQueryBuilderTest" time="0.002"/>
+  <testcase name="testBuildSearchRequest" classname="com.travelsupermarket.referencedata.elasticsearch.querybuilder.CarHireAutoCompleteAutoCompleteElasticsearchQueryBuilderTest" time="0.009"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

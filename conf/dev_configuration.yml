@@ -1,0 +1,18 @@
+applicationId: "hackathon-late-deals"
+applicationName: "hackathon-late-deals"
+buildNumber: 0.0.0
+deploymentColour: blue
+
+server:
+  applicationConnectors:
+  - type: http
+    port: 9999
+  adminConnectors:
+  - type: http
+    port: 9998
+  requestLog:
+    appenders: []
+
+aggConfig:
+  host: sit1.gb.travelsupermarket.com
+  port: 80

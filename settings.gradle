@@ -1,0 +1,4 @@
+rootProject.name = 'hackathon-late-deals'
+include 'services'
+
+project(":services").name = "hackathon-late-deals"

@@ -1,0 +1,16 @@
+{
+  "size" : 10,
+  "query" : {
+    "bool" : {
+      "must" : {
+        "term" : {
+          "iataCode" : "tst"
+        }
+      }
+    }
+  },
+  "_source" : {
+    "includes" : [ "geoCode.*", "providerId", "isOnAirport", "iataCode", "providerValues.*" ],
+    "excludes" : [ ]
+  }
+}

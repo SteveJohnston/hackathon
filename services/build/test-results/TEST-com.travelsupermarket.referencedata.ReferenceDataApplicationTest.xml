@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.travelsupermarket.referencedata.ReferenceDataApplicationTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2016-11-09T15:58:24" hostname="2789" time="1.167">
+  <properties/>
+  <testcase name="testNotAllowedRequest" classname="com.travelsupermarket.referencedata.ReferenceDataApplicationTest" time="0.442"/>
+  <testcase name="testBadRequest" classname="com.travelsupermarket.referencedata.ReferenceDataApplicationTest" time="0.121"/>
+  <testcase name="testNotFoundRequest" classname="com.travelsupermarket.referencedata.ReferenceDataApplicationTest" time="0.109"/>
+  <testcase name="testApplication" classname="com.travelsupermarket.referencedata.ReferenceDataApplicationTest" time="0.494"/>
+  <system-out><![CDATA[INFO  [2016-11-09 15:58:23,259] org.eclipse.jetty.util.log: Logging initialized @1815ms
+INFO  [2016-11-09 15:58:23,750] org.elasticsearch.plugins: [Angelica Jones] modules [], plugins [], sites []
+INFO  [2016-11-09 15:58:24,425] io.dropwizard.server.ServerFactory: Starting ReferenceDataApplication
+INFO  [2016-11-09 15:58:24,433] io.dropwizard.server.DefaultServerFactory: Registering jersey handler with root path prefix: /
+INFO  [2016-11-09 15:58:24,447] io.dropwizard.server.DefaultServerFactory: Registering admin handler with root path prefix: /
+INFO  [2016-11-09 15:58:24,481] org.eclipse.jetty.server.Server: jetty-9.2.13.v20150730
+INFO  [2016-11-09 15:58:24,946] io.dropwizard.jersey.DropwizardResourceConfig: The following paths were found for the configured resources:
+
+    GET     /global/tsm/reference-data/v1/admin/info (com.travelsupermarket.referencedata.resource.DetailsResource)
+    GET     /global/tsm/reference-data/v1/locations/carhire/search/{query} (com.travelsupermarket.referencedata.resource.CarHireAutoCompleteResource)
+    GET     /global/tsm/reference-data/v1/locations/flights/search/{query} (com.travelsupermarket.referencedata.resource.FlightsAutoCompleteResource)
+    GET     /global/tsm/reference-data/v1/locations/holidays/search/{query} (com.travelsupermarket.referencedata.resource.HolidaysAutoCompleteResource)
+    GET     /global/tsm/reference-data/v1/locations/hotels/search/{query} (com.travelsupermarket.referencedata.resource.HotelsAutoCompleteResource)
+    PUT     /global/tsm/reference-data/v1/refresh/elasticsearch (com.travelsupermarket.referencedata.resource.RefreshResource)
+    GET     /global/tsm/reference-data/v1/stations/carhire/search/{iata}/{limit} (com.travelsupermarket.referencedata.resource.CarHireStationResource)
+
+INFO  [2016-11-09 15:58:24,950] io.dropwizard.setup.AdminEnvironment: tasks = 
+
+    POST    /tasks/log-level (io.dropwizard.servlets.tasks.LogConfigurationTask)
+    POST    /tasks/gc (io.dropwizard.servlets.tasks.GarbageCollectionTask)
+
+INFO  [2016-11-09 15:58:24,962] org.eclipse.jetty.server.ServerConnector: Started application@25970e85{HTTP/1.1}{0.0.0.0:9014}
+INFO  [2016-11-09 15:58:24,967] org.eclipse.jetty.server.ServerConnector: Started admin@4b018156{HTTP/1.1}{0.0.0.0:9015}
+INFO  [2016-11-09 15:58:24,967] org.eclipse.jetty.server.Server: Started @3524ms
+INFO  [2016-11-09 15:58:24,975] org.elasticsearch.plugins: [Mangle] modules [], plugins [], sites []
+127.0.0.1 - - [09/Nov/2016:15:58:25 +0000] "POST /global/tsm/reference-data/v1/locations/holidays/search/test HTTP/1.1" 405 151 "-" "Jersey/2.22.1 (HttpUrlConnection 1.8.0_101)" 110
+INFO  [2016-11-09 15:58:25,417] org.elasticsearch.plugins: [Mister Sinister] modules [], plugins [], sites []
+127.0.0.1 - - [09/Nov/2016:15:58:25 +0000] "GET /global/tsm/reference-data/v1/locations/holidays/search/bad_query123 HTTP/1.1" 400 224 "-" "Jersey/2.22.1 (HttpUrlConnection 1.8.0_101)" 16
+INFO  [2016-11-09 15:58:25,538] org.elasticsearch.plugins: [Hellcat] modules [], plugins [], sites []
+127.0.0.1 - - [09/Nov/2016:15:58:25 +0000] "GET /global/tsm/reference-data/v1/locations/holidays/not/found HTTP/1.1" 404 134 "-" "Jersey/2.22.1 (HttpUrlConnection 1.8.0_101)" 4
+INFO  [2016-11-09 15:58:25,648] org.elasticsearch.plugins: [Feline] modules [], plugins [], sites []
+127.0.0.1 - - [09/Nov/2016:15:58:25 +0000] "GET /global/tsm/reference-data/v1/locations/holidays/search/test HTTP/1.1" 200 79 "-" "Jersey/2.22.1 (HttpUrlConnection 1.8.0_101)" 361
+INFO  [2016-11-09 15:58:26,155] org.eclipse.jetty.server.ServerConnector: Stopped application@25970e85{HTTP/1.1}{0.0.0.0:9014}
+INFO  [2016-11-09 15:58:26,163] org.eclipse.jetty.server.ServerConnector: Stopped admin@4b018156{HTTP/1.1}{0.0.0.0:9015}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
