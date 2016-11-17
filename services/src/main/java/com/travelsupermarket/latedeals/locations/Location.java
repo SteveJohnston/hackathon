@@ -11,6 +11,7 @@ public class Location {
     private final String locationFullName;
     private final String countryName;
     private final String continentName;
+    private final Double random;
 
 
     public Location() {
@@ -21,6 +22,7 @@ public class Location {
         this.continentName = null;
         this.countryName = null;
         this.locationFullName = null;
+        this.random = Math.random();
     }
 
     public Location(String locationId, Integer dvtRating, Integer tanRating, Integer partyRating,
@@ -32,6 +34,7 @@ public class Location {
         this.locationFullName = locationFullName;
         this.countryName = countryName;
         this.continentName = continentName;
+        this.random = Math.random();
     }
 
     public String getLocationId() {
@@ -62,9 +65,13 @@ public class Location {
         return locationFullName;
     }
 
+    public Double getRandom() {
+        return random;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(locationId, dvtRating, tanRating, partyRating, locationFullName, countryName, continentName);
+        return Objects.hash(locationId);
     }
 
     @Override
@@ -76,12 +83,6 @@ public class Location {
             return false;
         }
         final Location other = (Location) obj;
-        return Objects.equals(this.locationId, other.locationId)
-                && Objects.equals(this.dvtRating, other.dvtRating)
-                && Objects.equals(this.tanRating, other.tanRating)
-                && Objects.equals(this.partyRating, other.partyRating)
-                && Objects.equals(this.locationFullName, other.locationFullName)
-                && Objects.equals(this.countryName, other.countryName)
-                && Objects.equals(this.continentName, other.continentName);
+        return Objects.equals(this.locationId, other.locationId);
     }
 }

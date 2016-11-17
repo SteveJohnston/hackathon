@@ -30,6 +30,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -160,6 +161,8 @@ public class LateDealsResource {
         results = filterResultsTanDvtParty(results, tan, dvt, party);
         results = filterResultsChav(results, CHAV_MAP.get(chav));
         results = filterResultsPrice(results, PRICE_MAP.get(price));
+        results = filterUniqueLocation(results);
+        results = sortResults(results);
         return MAPPER.writeValueAsString(ImmutableList.copyOf(results));
     }
 
@@ -184,6 +187,20 @@ public class LateDealsResource {
         Range range = Range.closed(price.getMinPricePP(), price.getMaxPricePP());
         return results.stream()
                 .filter(result -> range.contains(result.getLeadInDeal().getFlights().get(0).getResults().get(0).getPrices().getConverted().getAvgPP().getAmount().intValue()))
+                .collect(Collectors.toList());
+    }
+
+    private List<HolidayCardResult> filterUniqueLocation(List<HolidayCardResult> results) {
+        return results.stream()
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    private List<HolidayCardResult> sortResults(List<HolidayCardResult> results) {
+        return results.stream()
+                .sorted((r1, r2) -> Double.compare(
+                        LOCATIONS_MAP.get(r1.getHotelLocation().getLocationId()).getRandom(),
+                        LOCATIONS_MAP.get(r2.getHotelLocation().getLocationId()).getRandom()))
                 .collect(Collectors.toList());
     }
 }
