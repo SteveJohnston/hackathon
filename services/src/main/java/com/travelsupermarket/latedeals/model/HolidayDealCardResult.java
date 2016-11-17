@@ -21,6 +21,13 @@ public class HolidayDealCardResult {
     @JsonIgnore
     private final Integer providerBoostValue;
 
+    public HolidayDealCardResult() {
+        this.date = null;
+        this.accomId = null;
+        this.flights = null;
+        this.providerBoostValue = null;
+    }
+
     /**
      * Constructor.
      *

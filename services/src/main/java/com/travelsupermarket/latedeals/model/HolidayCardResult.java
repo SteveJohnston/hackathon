@@ -17,6 +17,7 @@ import java.util.UUID;
  * Entity representing one single Holiday result (one single flight hotel combination).
  */
 public class HolidayCardResult {
+    private final String resultId;
     private final DateTime date;
     private final String accomId;
     private final GeoCode geoCode;
@@ -35,19 +36,48 @@ public class HolidayCardResult {
     private final Optional<String> touristParentId;
     private final Optional<String> touristParentName;
     private final boolean externalLocations;
+    private Integer chavRating;
+    private Integer dvtRating;
+    private Integer tanRating;
+    private Integer partyRating;
 
     @JsonIgnore
     private final Integer providerBoostValue;
 
+    public HolidayCardResult() {
+        this.resultId = null;
+        this.date = null;
+        this.accomId = null;
+        this.geoCode = null;
+        this.accomName = null;
+        this.starRating = null;
+        this.hotelLocation = null;
+        this.resultType = null;
+        this.reviews = null;
+        this.highlightedFacilities = null;
+        this.primaryImage = null;
+        this.summary = null;
+        this.recommendedScore = null;
+        this.leadInDeal = null;
+        this.providerBoostValue = null;
+        this.additionalDealSummaries = null;
+        this.featureCode = null;
+        this.touristParentId = null;
+        this.touristParentName = null;
+        this.externalLocations = false;
+    }
+
+
+
     /**
      * Constructor.
      */
-    public HolidayCardResult(DateTime date, String accomId, GeoCode geoCode, String accomName,
+    public HolidayCardResult(String resultId, DateTime date, String accomId, GeoCode geoCode, String accomName,
                              Integer starRating, HotelLocation hotelLocation, HolidayResultType resultType,
                              Review reviews, List<HotelsFacility> highlightedFacilities, ResultsImage primaryImage,
                              TravelSummary summary, Double recommendedScore, HolidayDealCardResult leadInDeal, Integer providerBoostValue,
                              List<HolidayAdditionalDealSummary> additionalDealSummaries) {
-        this(date, accomId, geoCode, accomName, starRating, hotelLocation, resultType, reviews, highlightedFacilities, primaryImage,
+        this(resultId, date, accomId, geoCode, accomName, starRating, hotelLocation, resultType, reviews, highlightedFacilities, primaryImage,
                 summary,recommendedScore, leadInDeal, providerBoostValue, additionalDealSummaries, Optional.<String>absent(),
                 Optional.<String>absent(), Optional.<String>absent(), false);
     }
@@ -74,12 +104,13 @@ public class HolidayCardResult {
      * @param touristParentName
      * @param externalLocations
      */
-    public HolidayCardResult(DateTime date, String accomId, GeoCode geoCode, String accomName,
+    public HolidayCardResult(String resultId, DateTime date, String accomId, GeoCode geoCode, String accomName,
                              Integer starRating, HotelLocation hotelLocation, HolidayResultType resultType,
                              Review reviews, List<HotelsFacility> highlightedFacilities, ResultsImage primaryImage,
                              TravelSummary summary, Double recommendedScore, HolidayDealCardResult leadInDeal, Integer providerBoostValue,
                              List<HolidayAdditionalDealSummary> additionalDealSummaries, Optional<String> featureCode,
                              Optional<String> touristParentId, Optional<String> touristParentName, boolean externalLocations) {
+        this.resultId = resultId;
         this.date = date;
         this.accomId = accomId;
         this.geoCode = geoCode;
@@ -99,6 +130,10 @@ public class HolidayCardResult {
         this.touristParentId = touristParentId;
         this.touristParentName = touristParentName;
         this.externalLocations = externalLocations;
+        this.chavRating = 0;
+        this.dvtRating = 0;
+        this.tanRating = 0;
+        this.partyRating = 0;
     }
 
     @JsonSerialize(using = DateTimeSerializer.class)
@@ -166,6 +201,38 @@ public class HolidayCardResult {
     public Optional<String> getTouristParentName() { return touristParentName; }
 
     public boolean isExternalLocations() { return externalLocations; }
+
+    public Integer getChavRating() {
+        return chavRating;
+    }
+
+    public void setChavRating(Integer chavRating) {
+        this.chavRating = chavRating;
+    }
+
+    public Integer getDvtRating() {
+        return dvtRating;
+    }
+
+    public void setDvtRating(Integer dvtRating) {
+        this.dvtRating = dvtRating;
+    }
+
+    public Integer getTanRating() {
+        return tanRating;
+    }
+
+    public void setTanRating(Integer tanRating) {
+        this.tanRating = tanRating;
+    }
+
+    public Integer getPartyRating() {
+        return partyRating;
+    }
+
+    public void setPartyRating(Integer partyRating) {
+        this.partyRating = partyRating;
+    }
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public List<HolidayAdditionalDealSummary> getAdditionalDealSummaries() { return additionalDealSummaries; }
@@ -249,6 +316,7 @@ public class HolidayCardResult {
      * Builder for HolidayCardResult.
      */
     public static final class Builder {
+        private String resultId;
         private DateTime date;
         private String accomId;
         private GeoCode geoCode;
@@ -274,6 +342,7 @@ public class HolidayCardResult {
          * Initialise the builder based on a HolidayCardResult
          */
         public Builder from(HolidayCardResult from) {
+            this.resultId = from.resultId;
             this.date = from.date;
             this.accomId = from.accomId;
             this.geoCode = from.geoCode;
@@ -293,6 +362,15 @@ public class HolidayCardResult {
             this.touristParentId = from.touristParentId;
             this.touristParentName = from.touristParentName;
             this.externalLocations = from.externalLocations;
+            return this;
+        }
+
+        /**
+         *
+         * @return
+         */
+        public Builder withResultId(String resultId) {
+            this.resultId = resultId;
             return this;
         }
 
@@ -491,7 +569,7 @@ public class HolidayCardResult {
          * @return
          */
         public HolidayCardResult build() {
-            return new HolidayCardResult(date, accomId, geoCode, accomName, starRating, hotelLocation,
+            return new HolidayCardResult(resultId, date, accomId, geoCode, accomName, starRating, hotelLocation,
                     resultType, reviews, highlightedFacilities, primaryImage, summary, recommendedScore, leadInDeal,
                     providerBoostValue, additionalDealSummaries, featureCode, touristParentId, touristParentName, externalLocations);
         }

@@ -38,6 +38,31 @@ public class HolidayDealProviderResult {
     private final Long cacheStartTime;
     private final Integer numNights;
 
+    /**
+     * Constructor.
+     */
+    public HolidayDealProviderResult() {
+        this.id = null;
+        this.providerId = null;
+        this.providerName = null;
+        this.phoneToBook = null;
+        this.prices = null;
+        this.flightPrices = null;
+        this.hotelPrices = null;
+        this.numSeatsRemaining = null;
+        this.numRoomsRemaining = null;
+        this.boardBasis = null;
+        this.checkInDate = null;
+        this.checkOutDate = null;
+        this.roomDescription = null;
+        this.dealMessage = null;
+        this.holidayExtras = null;
+        this.dealKey = null;
+        this.expires = null;
+        this.queryMetaHash = null;
+        this.numNights = null;
+        this.cacheStartTime = null;
+    }
 
     /**
      * Constructor.

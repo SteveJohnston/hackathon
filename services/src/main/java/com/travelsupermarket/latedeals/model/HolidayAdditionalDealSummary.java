@@ -19,6 +19,16 @@ public class HolidayAdditionalDealSummary {
     @JsonIgnore
     private final Integer providerBoostValue;
 
+    public HolidayAdditionalDealSummary() {
+        this.id = null;
+        this.providerId = null;
+        this.sequence = 0;
+        this.price = null;
+        this.dealKey = null;
+        this.expires = null;
+        this.providerBoostValue = null;
+    }
+
     /**
      *
      * @param id

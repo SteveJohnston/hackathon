@@ -13,6 +13,15 @@ public class HotelsFacility {
     /**
      * Constructor.
      */
+    public HotelsFacility() {
+        this.filterId = null;
+        this.name = null;
+        this.included = null;
+    }
+
+    /**
+     * Constructor.
+     */
     public HotelsFacility(String filterId, String name, Boolean included) {
         this.filterId = filterId;
         this.name = name;

@@ -18,6 +18,17 @@ public class HolidayDealFlight {
     /**
      * Constructor.
      */
+    public HolidayDealFlight() {
+        this.cardId = null;
+        this.cabinClass = null;
+        this.outbound = null;
+        this.inbound = null;
+        this.results = null;
+    }
+
+    /**
+     * Constructor.
+     */
     public HolidayDealFlight(String cardId, CabinClassType cabinClass, FlightCardJourney outbound,
                              FlightCardJourney inbound, List<HolidayDealProviderResult> results) {
         this.cardId = cardId;

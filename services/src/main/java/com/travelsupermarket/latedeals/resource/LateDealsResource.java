@@ -114,13 +114,12 @@ public class LateDealsResource {
                 String isComplete = MAPPER.writeValueAsString(resultJson.findValue("isComplete"));
 
                 String cards = getCards(resultJson.findValue("cards"));
-                return getCards(resultJson.findValue("cards"));
-//                return JOINER.join("{ \"providers\": " + providers,
-//                        "\"lookups\": " + lookups,
-//                        "\"sortFields\": " + sortFields,
-//                        "\"cards\" : " + cards,
-//                        "\"filterGroups\": " + filterGroups,
-//                        "\"isComplete\": " + isComplete + "}");
+                return JOINER.join("{ \"providers\": " + providers,
+                        "\"lookups\": " + lookups,
+                        "\"sortFields\": " + sortFields,
+                        "\"cards\" : " + cards,
+                        "\"filterGroups\": " + filterGroups,
+                        "\"isComplete\": " + isComplete + "}");
             } catch (Exception ex) {
                 return "";
             }
@@ -133,11 +132,18 @@ public class LateDealsResource {
         ArrayNode arrayNode = (ArrayNode) cardsNode;
         try {
             for (JsonNode node : arrayNode) {
-                results.add(MAPPER.readValue(MAPPER.writeValueAsString(node), HolidayCardResult.class));
+                HolidayCardResult result = MAPPER.readValue(MAPPER.writeValueAsString(node), HolidayCardResult.class);
+                Location location = LOCATIONS_MAP.get(result.getHotelLocation().getLocationId());
+                result.setChavRating(location.getChavRating());
+                result.setDvtRating(location.getDvtRating());
+                result.setPartyRating(location.getPartyRating());
+                result.setTanRating(location.getTanRating());
+                results.add(result);
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
             return "";
         }
-        return String.valueOf(results.build().size());
+        return MAPPER.writeValueAsString(results.build());
     }
 }

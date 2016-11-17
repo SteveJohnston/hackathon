@@ -7,6 +7,11 @@ public class HotelLocation {
     private final String locationId;
     private final boolean withinRange;
 
+    public HotelLocation() {
+        this.locationId = null;
+        this.withinRange = false;
+    }
+
     /**
      * Constructor.
      */

@@ -10,6 +10,13 @@ public class TravelSummary {
     private final Double valueNextProvider;
     private final Double valueAvgProvider;
 
+    protected TravelSummary() {
+        this.uniqueNumProviders = null;
+        this.numResults = null;
+        this.valueNextProvider = null;
+        this.valueAvgProvider = null;
+    }
+
     protected TravelSummary(Integer uniqueNumProviders, Integer numResults, Double valueNextProvider, Double valueAvgProvider) {
         this.uniqueNumProviders = uniqueNumProviders;
         this.numResults = numResults;
