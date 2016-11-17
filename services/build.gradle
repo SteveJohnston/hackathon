@@ -36,6 +36,9 @@ dependencies {
     compile(group: 'com.travelsupermarket.services', name: 'http-errors', version: '1.11.8') {
         exclude(group: 'com.fasterxml.jackson.core')
     }
+    compile(group: 'com.msm.utils', name: 'utils-jackson', version: '2.0.4-SNAPSHOT') {
+        exclude(group: 'com.fasterxml.jackson.core')
+    }
     compile(group: 'com.moneysupermarket', name: 'application-dropwizard_2.10', version: '9.2.0') {
         exclude(group: 'com.sun.jersey')
     }
@@ -129,17 +132,6 @@ publishing {
             artifact javadocJar
             artifact sourcesJar
             artifact distZip
-        }
-    }
-}
-
-sourceSets {
-    main {
-        java {
-            resources {
-                srcDirs = "src/main/resources"
-                include = "*"
-            }
         }
     }
 }

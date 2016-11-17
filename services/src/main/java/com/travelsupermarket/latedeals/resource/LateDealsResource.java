@@ -1,6 +1,7 @@
 package com.travelsupermarket.latedeals.resource;
 
 import com.codahale.metrics.annotation.Timed;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Joiner;
@@ -105,14 +106,25 @@ public class LateDealsResource {
                 String providers = MAPPER.writeValueAsString(resultJson.findValue("providers"));
                 String lookups = MAPPER.writeValueAsString(resultJson.findValue("lookups"));
                 String sortFields = MAPPER.writeValueAsString(resultJson.findValue("sortFields"));
-                //String cards = resultJson.findValue("cards").asText();
                 String filterGroups = MAPPER.writeValueAsString(resultJson.findValue("filterGroups"));
                 String isComplete = MAPPER.writeValueAsString(resultJson.findValue("isComplete"));
-                return JOINER.join(providers, lookups, sortFields, filterGroups, isComplete);
+
+                String cards = getCards(resultJson.findValue("cards"));
+
+                return JOINER.join("{ \"providers\": " + providers,
+                        "\"lookups\": " + lookups,
+                        "\"sortFields\": " + sortFields,
+                        "\"cards\" : " + cards,
+                        "\"filterGroups\": " + filterGroups,
+                        "\"isComplete\": " + isComplete + "}");
             } catch (Exception ex) {
                 return "";
             }
         }
         throw new InvalidUrlParameterException("You sent me crap", "", "", "");
+    }
+
+    public String getCards(JsonNode cardsNode) throws JsonProcessingException {
+        return MAPPER.writeValueAsString(cardsNode);
     }
 }

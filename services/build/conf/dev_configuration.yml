@@ -1,32 +1,18 @@
-applicationId: "tsm-reference-data-service"
-applicationName: "tsm-reference-data-service"
+applicationId: "hackathon-late-deals"
+applicationName: "hackathon-late-deals"
 buildNumber: 0.0.0
 deploymentColour: blue
 
 server:
   applicationConnectors:
   - type: http
-    port: 9014
+    port: 9999
   adminConnectors:
   - type: http
-    port: 9015
+    port: 9998
+  requestLog:
+    appenders: []
 
-logging:
-  level: INFO
-  loggers:
-     com.travelsupermarket.referencedata: TRACE
-     javax.management.modelmbean: WARN
-     org.eclipse.jetty.setuid: WARN
-     org.eclipse.jetty.server.handler: WARN
-  appenders:
-    - type: console
-      timeZone: UTC
-      target: stdout
-
-elasticsearchClientConfig:
-  host: n1.services-elasticsearch.services.ci1-services.gb.tsm.internal
-  port: 9300
-  holidaysIndexName: alan
-  carHireIndexName: alan
-  hotelsIndexName: alan
-  flightsIndexName: alan
+aggConfig:
+  host: sit1.gb.travelsupermarket.com
+  port: 80
