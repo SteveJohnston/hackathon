@@ -1,7 +1,3 @@
-plugins {
-    id "org.sonarqube" version "2.0.1"
-}
-
 apply plugin: 'net.researchgate.release'
 apply plugin: 'gradle-one-jar'
 apply plugin: 'application'
@@ -14,7 +10,7 @@ apply plugin: 'com.jfrog.artifactory'
 
 defaultTasks 'build', 'jacoco', 'install'
 
-mainClassName = 'com.travelsupermarket.hackathon.LateDealsApplication'
+mainClassName = 'com.travelsupermarket.latedeals.LateDealsApplication'
 
 release {
     failOnSnapshotDependencies = false
@@ -45,10 +41,6 @@ dependencies {
     }
 
     compile(group: 'com.moneysupermarket', name: 'mongodb_2.10', version: '9.2.0') {
-        exclude(group: 'com.sun.jersey')
-    }
-
-    compile(group: 'com.moneysupermarket', name: 'metrics_2.10', version: '9.2.0') {
         exclude(group: 'com.sun.jersey')
     }
 
@@ -105,7 +97,7 @@ artifacts {
 }
 
 run {
-    args 'server', 'conf/configuration.yml'
+    args 'server', '../conf/dev_configuration.yml'
 }
 
 artifactory {

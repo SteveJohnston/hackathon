@@ -4,13 +4,16 @@ import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.travelsupermarket.http.error.exception.InvalidUrlParameterException;
 import com.travelsupermarket.latedeals.locations.Location;
 import com.travelsupermarket.latedeals.locations.LocationsLoader;
 import com.travelsupermarket.latedeals.model.Enquiry;
+import com.travelsupermarket.latedeals.model.HolidayCardResult;
 import org.apache.commons.lang3.tuple.Pair;
 import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.client.JerseyClientBuilder;
@@ -22,6 +25,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.Map;
 
 public class LateDealsResource {
@@ -110,13 +114,13 @@ public class LateDealsResource {
                 String isComplete = MAPPER.writeValueAsString(resultJson.findValue("isComplete"));
 
                 String cards = getCards(resultJson.findValue("cards"));
-
-                return JOINER.join("{ \"providers\": " + providers,
-                        "\"lookups\": " + lookups,
-                        "\"sortFields\": " + sortFields,
-                        "\"cards\" : " + cards,
-                        "\"filterGroups\": " + filterGroups,
-                        "\"isComplete\": " + isComplete + "}");
+                return getCards(resultJson.findValue("cards"));
+//                return JOINER.join("{ \"providers\": " + providers,
+//                        "\"lookups\": " + lookups,
+//                        "\"sortFields\": " + sortFields,
+//                        "\"cards\" : " + cards,
+//                        "\"filterGroups\": " + filterGroups,
+//                        "\"isComplete\": " + isComplete + "}");
             } catch (Exception ex) {
                 return "";
             }
@@ -125,6 +129,15 @@ public class LateDealsResource {
     }
 
     public String getCards(JsonNode cardsNode) throws JsonProcessingException {
-        return MAPPER.writeValueAsString(cardsNode);
+        ImmutableList.Builder<HolidayCardResult> results = ImmutableList.builder();
+        ArrayNode arrayNode = (ArrayNode) cardsNode;
+        try {
+            for (JsonNode node : arrayNode) {
+                results.add(MAPPER.readValue(MAPPER.writeValueAsString(node), HolidayCardResult.class));
+            }
+        } catch (Exception ex) {
+            return "";
+        }
+        return String.valueOf(results.build().size());
     }
 }
