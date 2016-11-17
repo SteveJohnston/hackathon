@@ -1,10 +1,11 @@
-package com.travelsupermarket.latedeals.locations;
+package com.travelsupermarket.latedeals.chav;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Resources;
+import com.travelsupermarket.latedeals.locations.Location;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -12,28 +13,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class LocationsLoader {
+public class ChavLoader {
 
     private static final Splitter SPLITTER = Splitter.on("|");
-    private static final String RESOURCES_LOCATIONS_JSON = "locations.json";
+    private static final String RESOURCES_LOCATIONS_JSON = "chav.json";
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public static Map<String, Location> loadLocations() {
-        ImmutableMap.Builder<String, Location> locationsMap = ImmutableMap.builder();
+    public static Map<Integer, Chav> loadChavs() {
+        ImmutableMap.Builder<Integer, Chav> chavMap = ImmutableMap.builder();
         try {
             String json = Resources.toString(Resources.getResource(RESOURCES_LOCATIONS_JSON), Charsets.UTF_8);
-            List<Location> locations = SPLITTER.splitToList(json).stream().map(string -> {
+            List<Chav> locations = SPLITTER.splitToList(json).stream().map(string -> {
                 try {
-                    return MAPPER.readValue(string, Location.class);
+                    return MAPPER.readValue(string, Chav.class);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     return null;
                 }
-            }).filter(location -> location != null).collect(Collectors.toList());
-            locations.forEach(location -> locationsMap.put(location.getLocationId(), location));
+            }).filter(chav -> chav != null).collect(Collectors.toList());
+            locations.forEach(chav -> chavMap.put(chav.getChavScore(), chav));
         } catch (IOException ex) {
             return Collections.EMPTY_MAP;
         }
-        return locationsMap.build();
+        return chavMap.build();
     }
 }

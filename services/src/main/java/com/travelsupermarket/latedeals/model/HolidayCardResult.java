@@ -40,6 +40,9 @@ public class HolidayCardResult {
     private Integer dvtRating;
     private Integer tanRating;
     private Integer partyRating;
+    private String locationFullName;
+    private String countryName;
+    private String continentName;
 
     @JsonIgnore
     private final Integer providerBoostValue;
@@ -232,6 +235,30 @@ public class HolidayCardResult {
 
     public void setPartyRating(Integer partyRating) {
         this.partyRating = partyRating;
+    }
+
+    public String getLocationFullName() {
+        return locationFullName;
+    }
+
+    public void setLocationFullName(String locationFullName) {
+        this.locationFullName = locationFullName;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
+    public String getContinentName() {
+        return continentName;
+    }
+
+    public void setContinentName(String continentName) {
+        this.continentName = continentName;
     }
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

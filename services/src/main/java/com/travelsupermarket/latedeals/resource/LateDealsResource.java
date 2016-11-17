@@ -9,11 +9,16 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Range;
 import com.travelsupermarket.http.error.exception.InvalidUrlParameterException;
+import com.travelsupermarket.latedeals.chav.Chav;
+import com.travelsupermarket.latedeals.chav.ChavLoader;
 import com.travelsupermarket.latedeals.locations.Location;
 import com.travelsupermarket.latedeals.locations.LocationsLoader;
 import com.travelsupermarket.latedeals.model.Enquiry;
 import com.travelsupermarket.latedeals.model.HolidayCardResult;
+import com.travelsupermarket.latedeals.price.Price;
+import com.travelsupermarket.latedeals.price.PriceLoader;
 import org.apache.commons.lang3.tuple.Pair;
 import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.client.JerseyClientBuilder;
@@ -24,14 +29,17 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class LateDealsResource {
 
     private static final Joiner JOINER = Joiner.on(",");
     private static final Map<String, Location> LOCATIONS_MAP = LocationsLoader.loadLocations();
+    private static final Map<Integer, Chav> CHAV_MAP = ChavLoader.loadChavs();
+    private static final Map<Integer, Price> PRICE_MAP = PriceLoader.loadPrice();
     private static final Map<Integer, Pair<Integer, Integer>> MONEY_MAP = ImmutableMap.of(
             1, Pair.of(100, 300),
             2, Pair.of(200, 500),
@@ -113,7 +121,7 @@ public class LateDealsResource {
                 String filterGroups = MAPPER.writeValueAsString(resultJson.findValue("filterGroups"));
                 String isComplete = MAPPER.writeValueAsString(resultJson.findValue("isComplete"));
 
-                String cards = getCards(resultJson.findValue("cards"));
+                String cards = getCards(resultJson.findValue("cards"), tan.get(), dvt.get(), party.get(), chav.get(), money.get());
                 return JOINER.join("{ \"providers\": " + providers,
                         "\"lookups\": " + lookups,
                         "\"sortFields\": " + sortFields,
@@ -127,23 +135,55 @@ public class LateDealsResource {
         throw new InvalidUrlParameterException("You sent me crap", "", "", "");
     }
 
-    public String getCards(JsonNode cardsNode) throws JsonProcessingException {
-        ImmutableList.Builder<HolidayCardResult> results = ImmutableList.builder();
+    public String getCards(JsonNode cardsNode, int tan, int dvt, int party, int chav, int price) throws JsonProcessingException {
+        List<HolidayCardResult> results = new ArrayList<>();
         ArrayNode arrayNode = (ArrayNode) cardsNode;
         try {
             for (JsonNode node : arrayNode) {
                 HolidayCardResult result = MAPPER.readValue(MAPPER.writeValueAsString(node), HolidayCardResult.class);
-                Location location = LOCATIONS_MAP.get(result.getHotelLocation().getLocationId());
-                result.setChavRating(location.getChavRating());
-                result.setDvtRating(location.getDvtRating());
-                result.setPartyRating(location.getPartyRating());
-                result.setTanRating(location.getTanRating());
-                results.add(result);
+                if (LOCATIONS_MAP.containsKey(result.getHotelLocation().getLocationId())) {
+                    Location location = LOCATIONS_MAP.get(result.getHotelLocation().getLocationId());
+                    result.setDvtRating(location.getDvtRating());
+                    result.setPartyRating(location.getPartyRating());
+                    result.setTanRating(location.getTanRating());
+                    result.setContinentName(location.getContinentName());
+                    result.setCountryName(location.getCountryName());
+                    result.setLocationFullName(location.getLocationFullName());
+                    results.add(result);
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
             return "";
         }
-        return MAPPER.writeValueAsString(results.build());
+
+        results = filterResultsTanDvtParty(results, tan, dvt, party);
+        results = filterResultsChav(results, CHAV_MAP.get(chav));
+        results = filterResultsPrice(results, PRICE_MAP.get(price));
+        return MAPPER.writeValueAsString(ImmutableList.copyOf(results));
+    }
+
+    private List<HolidayCardResult> filterResultsTanDvtParty(List<HolidayCardResult> results, int tan, int dvt, int party) {
+        return results.stream()
+                .filter(result -> result.getTanRating() == tan)
+                .filter(result -> result.getDvtRating() == dvt)
+                .filter(result -> result.getPartyRating() == party)
+                .collect(Collectors.toList());
+    }
+
+    private List<HolidayCardResult> filterResultsChav(List<HolidayCardResult> results, Chav chav) {
+        Range starRange = Range.closed(chav.getMinStarRating(), chav.getMaxStarRating());
+        Range guestRange = Range.closed(chav.getMinGuestRating(), chav.getMaxGuestRating());
+        return results.stream()
+                .filter(result -> starRange.contains(result.getStarRating()))
+                .filter(result -> result.getReviews() != null &&  guestRange.contains(result.getReviews().getScore()))
+                .collect(Collectors.toList());
+    }
+
+    private List<HolidayCardResult> filterResultsPrice(List<HolidayCardResult> results, Price price) {
+        Range range = Range.closed(price.getMinPricePP(), price.getMaxPricePP());
+        return results.stream()
+                .filter(result -> range.contains(result.getLeadInDeal().getFlights().get(0).getResults().get(0).getPrices().getConverted().getAvgPP().getAmount().intValue()))
+                .collect(Collectors.toList());
     }
 }
