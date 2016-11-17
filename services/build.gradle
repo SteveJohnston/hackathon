@@ -31,7 +31,8 @@ dependencies {
             'io.dropwizard:dropwizard-client:1.0.4',
             'ru.vyarus:dropwizard-guicey:3.2.0',
             'com.google.inject:guice:4.0',
-            'com.google.guava:guava:19.0'
+            'com.google.guava:guava:19.0',
+            'org.joda:joda-money:0.10.0'
 
     compile(group: 'com.travelsupermarket.services', name: 'http-errors', version: '1.11.8') {
         exclude(group: 'com.fasterxml.jackson.core')
@@ -101,7 +102,6 @@ distributions {
 artifacts {
     oneJar
     archives sourcesJar
-    archives javadocJar
 }
 
 run {
