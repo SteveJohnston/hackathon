@@ -67,7 +67,7 @@ public class LateDealsResource {
     @Timed
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/search/{date}/{nights}/{rooms}/{departure}/{chav}/{tan}/{money}/{party}/{dvt}")
-    public Enquiry search(@PathParam("date") Optional<String> date,
+    public String search(@PathParam("date") Optional<String> date,
                           @PathParam("nights") Optional<Integer> nights,
                           @PathParam("rooms") Optional<String> rooms,
                           @PathParam("departure") Optional<String> departure,
@@ -76,19 +76,28 @@ public class LateDealsResource {
                           @PathParam("money") Optional<Integer> money,
                           @PathParam("party") Optional<Integer> party,
                           @PathParam("dvt") Optional<Integer> dvt,
-                          @QueryParam("userId") Optional<String> userId)
+                          @QueryParam("userId") Optional<String> userId,
+                         @QueryParam("callback") Optional<String> callback)
             throws InvalidUrlParameterException {
-        if (date.isPresent() && nights.isPresent()) {
-            return client
-                    .target(String.format(QUERY_URL, date.get(), nights.get()))
-                    .queryParam("departures", departure.get())
-                    .queryParam("destinations", "56374488e4b00555cedbb8c9")
-                    .queryParam("minBudget", MONEY_MAP.get(money.get()).getLeft())
-                    .queryParam("maxBudget", MONEY_MAP.get(money.get()).getRight())
-                    .queryParam("room", rooms.get())
-                    .queryParam("userId", userId.get())
-                    .request(MediaType.APPLICATION_JSON)
-                    .get(Enquiry.class);
+        try {
+            if (date.isPresent() && nights.isPresent()) {
+                String result = MAPPER.writeValueAsString(client
+                        .target(String.format(QUERY_URL, date.get(), nights.get()))
+                        .queryParam("departures", departure.get())
+                        .queryParam("destinations", "56374488e4b00555cedbb8c9")
+                        .queryParam("minBudget", MONEY_MAP.get(money.get()).getLeft())
+                        .queryParam("maxBudget", MONEY_MAP.get(money.get()).getRight())
+                        .queryParam("room", rooms.get())
+                        .queryParam("userId", userId.get())
+                        .request(MediaType.APPLICATION_JSON)
+                        .get(Enquiry.class));
+                if (callback.isPresent()) {
+                    result = callback.get() + "(" + result + ");";
+                }
+                return result;
+            }
+        } catch (Exception ex) {
+            return "";
         }
         throw new InvalidUrlParameterException("You sent me crap", "", "", "");
     }
