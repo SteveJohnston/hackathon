@@ -106,7 +106,8 @@ public class LateDealsResource {
                           @PathParam("tan") Optional<Integer> tan,
                           @PathParam("money") Optional<Integer> money,
                           @PathParam("party") Optional<Integer> party,
-                          @PathParam("dvt") Optional<Integer> dvt) throws InvalidUrlParameterException {
+                          @PathParam("dvt") Optional<Integer> dvt,
+                          @QueryParam("callback") Optional<String> callback) throws InvalidUrlParameterException {
 
         if (date.isPresent() && enquiryId.isPresent()) {
             try {
@@ -123,12 +124,16 @@ public class LateDealsResource {
                 String isComplete = MAPPER.writeValueAsString(resultJson.findValue("isComplete"));
 
                 String cards = getCards(resultJson.findValue("cards"), tan.get(), dvt.get(), party.get(), chav.get(), money.get());
-                return JOINER.join("{ \"providers\": " + providers,
+                String result = JOINER.join("{ \"providers\": " + providers,
                         "\"lookups\": " + lookups,
                         "\"sortFields\": " + sortFields,
                         "\"cards\" : " + cards,
                         "\"filterGroups\": " + filterGroups,
                         "\"isComplete\": " + isComplete + "}");
+                if (callback.isPresent()) {
+                    result = callback.get() + "(" + result + ");";
+                }
+                return result;
             } catch (Exception ex) {
                 return "";
             }
