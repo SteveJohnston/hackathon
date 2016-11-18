@@ -8,6 +8,9 @@ import org.json.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by thomas.dittmer on 17/11/2016.
@@ -46,15 +49,18 @@ public class PriceDataResource {
 
             DBCursor cursor = table.find(searchQuery, fields);
 
-
+            List<JSONObject> list = new ArrayList<>();
             while (cursor.hasNext()) {
                 BasicDBObject obj = (BasicDBObject) cursor.next();
                 JSONObject jsonobj = new JSONObject();
                 jsonobj.put("searchDate", obj.getString("searchdate"));
                 jsonobj.put("avgPrice", obj.getString("avgprice"));
-
-                jsonarray.put(jsonobj);
+                list.add(jsonobj);
             }
+
+            jsonarray.put(list.stream()
+                    .sorted((j1, j2) -> j1.getString("searchDate").compareTo(j2.getString("searchDate")))
+                    .collect(Collectors.toList()));
 
             returnObject.put("locationId", locationId);
             returnObject.put("departureDate", departureDate);
