@@ -1,14 +1,12 @@
 package com.travelsupermarket.latedeals.resource;
 
 import com.codahale.metrics.annotation.Timed;
+import com.google.common.base.Optional;
 import com.mongodb.*;
 import com.travelsupermarket.http.error.exception.InvalidUrlParameterException;
 import org.json.*;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -25,7 +23,8 @@ public class PriceDataResource {
     @Path("/{locationId}/{departureIata}/{departureDate}")
     public String results(@PathParam("locationId") String locationId,
                           @PathParam("departureIata") String departureIata,
-                          @PathParam("departureDate") String departureDate) throws InvalidUrlParameterException {
+                          @PathParam("departureDate") String departureDate,
+                          @QueryParam("callback") Optional<String> callback) throws InvalidUrlParameterException {
 
         JSONObject returnObject = new JSONObject();
         JSONArray jsonarray = new JSONArray();
@@ -66,6 +65,13 @@ public class PriceDataResource {
             return ex.toString();
 
         }
-        return returnObject.toString();
+
+        String returnString = returnObject.toString();
+
+        if (callback.isPresent()) {
+            returnString = callback.get() + "(" + returnString + ");";
+        }
+
+        return returnString;
     }
 }

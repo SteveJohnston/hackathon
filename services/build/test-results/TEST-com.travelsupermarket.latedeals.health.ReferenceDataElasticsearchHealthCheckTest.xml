@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.travelsupermarket.latedeals.health.ReferenceDataElasticsearchHealthCheckTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2016-11-18T10:58:35" hostname="1669-MAC" time="0.007">
+  <properties/>
+  <testcase name="testCheck" classname="com.travelsupermarket.latedeals.health.ReferenceDataElasticsearchHealthCheckTest" time="0.007"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

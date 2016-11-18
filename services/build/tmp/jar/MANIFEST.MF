@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Implementation-Title: hackathon-late-deals
+Implementation-Version: 1.0.37
+
