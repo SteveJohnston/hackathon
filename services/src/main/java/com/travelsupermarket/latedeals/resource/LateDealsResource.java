@@ -158,49 +158,27 @@ public class LateDealsResource {
             return "";
         }
 
-        results = filterResultsTanDvtParty(results, tan, dvt, party);
-        results = filterResultsChav(results, CHAV_MAP.get(chav));
-        results = filterResultsPrice(results, PRICE_MAP.get(price));
-        results = filterUniqueLocation(results);
-        results = sortResults(results);
-        return MAPPER.writeValueAsString(ImmutableList.copyOf(results));
-    }
+        Chav chavRating = CHAV_MAP.get(chav);
+        Price priceVal = PRICE_MAP.get(price);
+        Range starRange = Range.closed(chavRating.getMinStarRating(), chavRating.getMaxStarRating());
+        Range guestRange = Range.closed(chavRating.getMinGuestRating(), chavRating.getMaxGuestRating());
+        Range range = Range.closed(priceVal.getMinPricePP(), priceVal.getMaxPricePP());
 
-    private List<HolidayCardResult> filterResultsTanDvtParty(List<HolidayCardResult> results, int tan, int dvt, int party) {
-        return results.stream()
-                .filter(result -> result.getTanRating() == tan)
-                .filter(result -> result.getDvtRating() == dvt)
-                .filter(result -> result.getPartyRating() == party)
-                .collect(Collectors.toList());
-    }
-
-    private List<HolidayCardResult> filterResultsChav(List<HolidayCardResult> results, Chav chav) {
-        Range starRange = Range.closed(chav.getMinStarRating(), chav.getMaxStarRating());
-        Range guestRange = Range.closed(chav.getMinGuestRating(), chav.getMaxGuestRating());
-        return results.stream()
-                .filter(result -> starRange.contains(result.getStarRating()))
-                .filter(result -> result.getReviews() != null &&  guestRange.contains(result.getReviews().getScore()))
-                .collect(Collectors.toList());
-    }
-
-    private List<HolidayCardResult> filterResultsPrice(List<HolidayCardResult> results, Price price) {
-        Range range = Range.closed(price.getMinPricePP(), price.getMaxPricePP());
-        return results.stream()
-                .filter(result -> range.contains(result.getLeadInDeal().getFlights().get(0).getResults().get(0).getPrices().getConverted().getAvgPP().getAmount().intValue()))
-                .collect(Collectors.toList());
-    }
-
-    private List<HolidayCardResult> filterUniqueLocation(List<HolidayCardResult> results) {
-        return results.stream()
+        results = results.parallelStream()
+                .filter(result -> result.getTanRating() == tan &&
+                                result.getDvtRating() == dvt &&
+                                result.getPartyRating() == party &&
+                                starRange.contains(result.getStarRating()) &&
+                                result.getReviews() != null &&
+                                guestRange.contains(result.getReviews().getScore()) &&
+                                range.contains(result.getLeadInDeal().getFlights().get(0).getResults().get(0).getPrices().getConverted().getAvgPP().getAmount().intValue())
+                )
                 .distinct()
-                .collect(Collectors.toList());
-    }
-
-    private List<HolidayCardResult> sortResults(List<HolidayCardResult> results) {
-        return results.stream()
                 .sorted((r1, r2) -> Double.compare(
                         LOCATIONS_MAP.get(r1.getHotelLocation().getLocationId()).getRandom(),
                         LOCATIONS_MAP.get(r2.getHotelLocation().getLocationId()).getRandom()))
                 .collect(Collectors.toList());
+
+        return MAPPER.writeValueAsString(ImmutableList.copyOf(results));
     }
 }
