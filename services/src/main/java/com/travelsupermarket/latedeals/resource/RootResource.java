@@ -9,16 +9,16 @@ import javax.ws.rs.Path;
 public class RootResource {
 
     private final LateDealsResource lateDealsResource;
-//    private final PriceDataResource priceDataResource;
+    private final PriceDataResource priceDataResource;
 
     /**
      * Creates a root resource and populates it with resources and paths.
      *
      * @param lateDealsResource            The details resource.
      */
-    public RootResource(LateDealsResource lateDealsResource) {
+    public RootResource(LateDealsResource lateDealsResource, PriceDataResource priceDataResource) {
         this.lateDealsResource = lateDealsResource;
-//        this.priceDataResource = priceDataResource;
+        this.priceDataResource = priceDataResource;
     }
 
     @Path("/holidays")
@@ -26,8 +26,8 @@ public class RootResource {
         return this.lateDealsResource;
     }
 
-//    @Path("/price-data")
-//    public PriceDataResource getPriceDataResouce() {
-//        return this.priceDataResource;
-//    }
+    @Path("/price-data")
+    public PriceDataResource getPriceDataResouce() {
+        return this.priceDataResource;
+    }
 }
