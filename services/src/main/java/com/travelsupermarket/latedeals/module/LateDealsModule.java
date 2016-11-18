@@ -28,8 +28,8 @@ public class LateDealsModule extends AbstractModule {
      * @return A Root Resource.
      */
     @Provides
-    public RootResource RootResource(final LateDealsResource lateDealsResource) {
-        return new RootResource(lateDealsResource, new PriceDataResource());
+    public RootResource RootResource(final LateDealsResource lateDealsResource, final PriceDataResource priceDataResource) {
+        return new RootResource(lateDealsResource, priceDataResource);
     }
 
     /**

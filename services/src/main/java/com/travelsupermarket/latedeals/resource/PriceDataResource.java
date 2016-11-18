@@ -3,6 +3,7 @@ package com.travelsupermarket.latedeals.resource;
 import com.codahale.metrics.annotation.Timed;
 import com.mongodb.*;
 import com.travelsupermarket.http.error.exception.InvalidUrlParameterException;
+import org.json.*;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -21,31 +22,50 @@ public class PriceDataResource {
     @GET
     @Timed
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/price-data/{Id}/{locationId}/{departureIata}/{departureDate}")
+    @Path("/{locationId}/{departureIata}/{departureDate}")
     public String results(@PathParam("locationId") String locationId,
                           @PathParam("departureIata") String departureIata,
                           @PathParam("departureDate") String departureDate) throws InvalidUrlParameterException {
 
+        JSONObject returnObject = new JSONObject();
+        JSONArray jsonarray = new JSONArray();
         try {
-            MongoClient mongo = new MongoClient( "hackathon-937194125.eu-west-1.elb.amazonaws.com" , 27017 );
+            MongoClient mongo = new MongoClient( "backoffice-hackathon.backoffice1.gb.tsm.internal", 27017 );
             DB db = mongo.getDB("travelate");
             DBCollection table = db.getCollection("priceHistory");
 
             BasicDBObject searchQuery = new BasicDBObject();
-            searchQuery.put("locationId", locationId);
-            searchQuery.put("departureIata", departureIata);
-            searchQuery.put("departureDate", departureDate);
+            searchQuery.put("locationid", locationId);
+            searchQuery.put("departureiata", departureIata);
+            searchQuery.put("departuredate", departureDate);
 
-            DBCursor cursor = table.find(searchQuery);
+            BasicDBObject fields = new BasicDBObject();
+            fields.put("_id", 0);
+            fields.put("searchdate", 1);
+            fields.put("avgprice", 1);
+
+
+            DBCursor cursor = table.find(searchQuery, fields);
+
 
             while (cursor.hasNext()) {
-                System.out.println(cursor.next());
+                BasicDBObject obj = (BasicDBObject) cursor.next();
+                JSONObject jsonobj = new JSONObject();
+                jsonobj.put("searchDate", obj.getString("searchdate"));
+                jsonobj.put("avgPrice", obj.getString("avgprice"));
+
+                jsonarray.put(jsonobj);
             }
+
+            returnObject.put("locationId", locationId);
+            returnObject.put("departureDate", departureDate);
+            returnObject.put("departureIata", departureIata);
+            returnObject.put("priceHistory", jsonarray);
 
         } catch (Exception ex) {
             return ex.toString();
 
         }
-        throw new InvalidUrlParameterException("You sent me crap", "", "", "");
+        return returnObject.toString();
     }
 }
