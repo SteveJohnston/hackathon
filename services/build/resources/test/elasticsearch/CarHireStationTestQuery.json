@@ -1,9 +1,0 @@
-{
-  "bool" : {
-    "must" : {
-      "term" : {
-        "iataCode" : "tst"
-      }
-    }
-  }
-}

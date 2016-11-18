@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.travelsupermarket.latedeals.resource.LateDealsResource;
+import com.travelsupermarket.latedeals.resource.PriceDataResource;
 import com.travelsupermarket.latedeals.resource.RootResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +28,8 @@ public class LateDealsModule extends AbstractModule {
      * @return A Root Resource.
      */
     @Provides
-    public RootResource RootResource(final LateDealsResource lateDealsResource) {
-        return new RootResource(lateDealsResource);
+    public RootResource RootResource(final LateDealsResource lateDealsResource, final PriceDataResource priceDataResource) {
+        return new RootResource(lateDealsResource, priceDataResource);
     }
 
     /**

@@ -43,6 +43,7 @@ dependencies {
     compile(group: 'com.moneysupermarket', name: 'mongodb_2.10', version: '9.2.0') {
         exclude(group: 'com.sun.jersey')
     }
+    compile(group: 'org.json', name: 'json', version: '20160810')
 
     testCompile 'org.mockito:mockito-core:2.0.2-beta',
             'org.hamcrest:hamcrest-all:1.3',
